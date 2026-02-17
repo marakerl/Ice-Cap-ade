@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -8,11 +9,15 @@ public class Controller implements KeyListener{
     View view;
     Timer tick;
     private int tickSpeed = 10;
+    private JPanel container;
+    private CardLayout layout;
 
 
-    public Controller (Model m, View v) {
+    public Controller (Model m, View v, JPanel container, CardLayout layout) {
         this.model = m;
         this.view = v;
+        this.container = container;
+        this.layout = layout;
     }
 
     public void initTick () {
@@ -26,19 +31,24 @@ public class Controller implements KeyListener{
             model.removeFirst(model.getObstacles());
 
             if(model.inHitBox(model.getObstacles(),model.getPlayer())) {
-                tick.stop();
+                stopGameAndReturnToMenu();
             }
             view.repaint();
         });
     }
 
+    private void stopGameAndReturnToMenu() {
+        tick.stop();
+        layout.show(container, "MENU");
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            if (!tick.isRunning()) {
+            /*if (!tick.isRunning()) {
                 tick.start();
                 model.reset();
-            }
+            }*/
             model.playerJump();
             view.repaint();
         }

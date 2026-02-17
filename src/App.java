@@ -4,23 +4,26 @@ import java.awt.*;
 
 public class App {
     public static void main(String[] args){
-        //Setup MVC
-        Model model = new Model();
-        View gameView = new View(model);
-        Controller controller = new Controller(model, gameView);
-        gameView.init(controller);
-
         //Setup the Window and layout
         JFrame frame = new JFrame("Ice Cap-ade");
         CardLayout layout = new CardLayout();
         JPanel container = new JPanel(layout);
 
+        //Setup MVC
+        Model model = new Model();
+        View gameView = new View(model);
+        Controller controller = new Controller(model, gameView, container, layout);
+        gameView.init(controller);
+        controller.initTick();
+
+
 
         //Menu and define start action
         MenuView menuView = new MenuView(e -> {
+            model.reset();
             layout.show(container, "GAME");
             gameView.requestFocusInWindow();
-            controller.initTick();
+            controller.tick.start();
         });
 
         //Add containers
