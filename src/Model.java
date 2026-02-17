@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.LinkedList;
 
 public class Model {
@@ -7,10 +8,17 @@ public class Model {
     private int stepJump;
     private boolean jumping;
     boolean bool = false;
+    private int playerWidth = 200;
+    private int playerStartX = 200;
+    private int playerStartY = 500;
 
     public Model (){
+        clouds = new LinkedList<>();
+        clouds.add(new Clouds(200, 100, 1)); // Slow cloud
+        clouds.add(new Clouds(600, 250, 2)); // Slightly faster cloud
+        clouds.add(new Clouds(900, 50, 1));
         obstacles = new LinkedList<>();
-        player = new Player(200,500,50,50);
+        player = new Player(playerStartX,playerStartY,playerWidth);
         addObstacle(obstacles);
     }
 
@@ -25,12 +33,19 @@ public class Model {
         }
     }
 
-    public void addClouds(LinkedList<Clouds> clouds){
-        Clouds c = new Clouds();
-        clouds.add(c);
+    public void updateWorld() {
+        moveObstacle(obstacles);
+        moveClouds(clouds); // Move clouds every tick
+
+        // Loop clouds: if a cloud leaves the screen, wrap it back to the right
+        for (Clouds c : clouds) {
+            if (c.x < -200) {
+                c.x = 1100;
+            }
+        }
     }
 
-    public void moveClouds(LinkedList<Clouds> clouds){
+    public void moveClouds(LinkedList<Clouds> clouds) {
         for (Clouds c : clouds) {
             c.updateX();
         }
@@ -58,13 +73,20 @@ public class Model {
     }
 
     public boolean inHitBox (LinkedList<Obstacle> os, Player p) {
-        Obstacle o = os.getFirst();
+        Rectangle playerRect = p.getBounds();
 
-        boolean horizontal = p.x + p.WIDTH > o.x && p.x < o.x + o.WIDTH;
-        boolean hitsTopPipe = p.y < o.yTop + o.HEIGHT;
-        boolean hitsBottomPipe = p.y + p.HEIGHT > o.yBottom;
+        for (Obstacle o : os) {
+            // If player hits the top pipe OR the bottom pipe of this obstacle
+            if (playerRect.intersects(o.getTopBounds()) ||
+                    playerRect.intersects(o.getBottomBounds())) {
+                return true;
+            }
+        }
 
-        return horizontal && (hitsTopPipe || hitsBottomPipe);
+        // Check floor/ceiling
+        if (p.y < 0 || p.y + p.HEIGHT > 1000) return true;
+
+        return false;
     }
 
     public void score () {
@@ -94,7 +116,7 @@ public class Model {
     public void reset() {
         obstacles.remove();
         obstacles = new LinkedList<>();
-        player = new Player(200,500,50,50);
+        player = new Player(playerStartX,playerStartY,playerWidth);
         addObstacle(obstacles);
     }
 

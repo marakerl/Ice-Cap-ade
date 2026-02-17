@@ -1,27 +1,26 @@
 import java.awt.*;
-import java.util.Random;
 
 public class Clouds {
-    int x;
-    int y;
-    int WIDTH;
-    int HEIGHT;
-    Random rand = new Random();
-    int speed = 5;
+    public int x, y;
+    public int speed;
 
-    public Clouds(){
-        x = 1000;
-        y = 1000;
-        WIDTH = 100;
-        HEIGHT = 100;
+    public Clouds(int x, int y, int speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
     }
 
-    public void draw (Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(x,y, WIDTH,HEIGHT);//Nere
-    }
-
-    public void updateX (){
+    public void updateX() {
         this.x -= speed;
+    }
+
+    public void draw(Graphics g) {
+        // Use a semi-transparent white for a soft look
+        g.setColor(new Color(255, 255, 255, 200));
+
+        // Draw 3 overlapping ovals to create one cloud
+        g.fillOval(x, y, 80, 50);
+        g.fillOval(x + 25, y - 15, 100, 60);
+        g.fillOval(x + 60, y, 80, 50);
     }
 }

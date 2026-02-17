@@ -8,7 +8,7 @@ public class App {
         Model model = new Model();
         View gameView = new View(model);
         Controller controller = new Controller(model, gameView);
-        gameView.init(controller);//_---
+        gameView.init(controller);
 
         //Setup the Window and layout
         JFrame frame = new JFrame("Ice Cap-ade");
@@ -29,6 +29,7 @@ public class App {
 
         //Frame setup
         frame.add(container);
+        frame.pack(); // This makes the inner area EXACTLY 1000x1000
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
         frame.setLocationRelativeTo(null);
