@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Ice Cap-ade:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Ice_Cap_ade_jar</output-path>
+    <root id="archive" name="Ice Cap-ade.jar">
+      <element id="module-output" name="Ice Cap-ade" />
+    </root>
+  </artifact>
+</component>

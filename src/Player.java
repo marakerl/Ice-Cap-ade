@@ -23,9 +23,9 @@ public class Player {
         this.score = 0;
 
         try {
-            imgUp = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_up.png"));
+            imgUp = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_down.png"));
             imgStraigt = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_straight.png"));
-            imgDown = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_down.png"));
+            imgDown = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_up.png"));
         } catch (IOException e) {
             System.out.println("Could not load sprites, using fallback colors.");
         }
@@ -61,9 +61,11 @@ public class Player {
         g2d.translate(-(x + WIDTH / 2), -(y + HEIGHT / 2));
 
         // DEBUG: Draw the hitbox in red
+        /*
         g.setColor(Color.RED);
         Rectangle r = getBounds();
         g.drawRect(r.x, r.y, r.width, r.height);
+        */
     }
 
     public Rectangle getBounds() {

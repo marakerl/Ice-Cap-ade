@@ -50,9 +50,41 @@ public class View extends JPanel {
 
         // 4. Draw Player (On top of everything)
         model.getPlayer().draw(g);
+
+        // 5. THE DEATH SCREEN OVERLAY (Top layer)
+        if (model.isGameOver()) {
+            // A. Draw a semi-transparent "dimmer" over the whole screen
+            g2d.setColor(new Color(0, 0, 0, 170)); // Black with 170/255 transparency
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+
+            // B. Set up text rendering (Anti-aliasing makes text look smooth)
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            // C. Draw "GAME OVER"
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 70));
+            String mainText = "ICE CRASHED!";
+            drawCenteredString(g2d, mainText, getHeight() / 2 - 40);
+
+            // D. Draw Final Score
+            g2d.setFont(new Font("Arial", Font.PLAIN, 30));
+            String scoreText = "Final Score: " + model.getPlayer().score;
+            drawCenteredString(g2d, scoreText, getHeight() / 2 + 30);
+
+            // E. Draw Hint
+            g2d.setFont(new Font("Arial", Font.ITALIC, 18));
+            g2d.setColor(Color.LIGHT_GRAY);
+            drawCenteredString(g2d, "Press SPACE to return to Menu", getHeight() / 2 + 100);
+        }
     }
 
     public void updateScoreText (){
         scoreBoard.setText("Score: "+model.getPlayer().score);
+    }
+
+    private void drawCenteredString(Graphics2D g2d, String text, int y) {
+        FontMetrics metrics = g2d.getFontMetrics();
+        int x = (getWidth() - metrics.stringWidth(text)) / 2;
+        g2d.drawString(text, x, y);
     }
 }

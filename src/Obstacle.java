@@ -40,26 +40,27 @@ public class Obstacle {
 
     public void draw (Graphics g) {
         if (iceSprite != null) {
-            // --- DRAW TOP PIPE (FLIPPED) ---
-            // We draw from (x, yTop + HEIGHT) up to (x + WIDTH, yTop)
-            // This effectively mirrors the image vertically.
+            // DRAW TOP BLOCK (FLIPPED)
             g.drawImage(iceSprite, x-(fitSprite/2), yTop + HEIGHT, WIDTH+fitSprite, -HEIGHT, null);
 
-            // --- DRAW BOTTOM PIPE (NORMAL) ---
+            // DRAW BOTTOM BLOCK (NORMAL)
             g.drawImage(iceSprite, x-(fitSprite/2), yBottom, WIDTH+fitSprite, 1000 - yBottom, null);
 
         } else {
             // Fallback
-            g.setColor(Color.GREEN);
+            g.setColor(Color.BLUE);
             g.fillRect(x, yTop, WIDTH, HEIGHT);
             g.fillRect(x, yBottom, WIDTH, 1000 - yBottom);
         }
 
+        //Hitbox debug
+        /*
         g.setColor(Color.RED);
         Rectangle r = getTopBounds();
         Rectangle r2 = getBottomBounds();
         g.drawRect(r.x, r.y, r.width, r.height);
         g.drawRect(r2.x, r2.y, r2.width, r2.height);
+        */
     }
 
     public Rectangle getTopBounds() {

@@ -11,6 +11,7 @@ public class Model {
     private int playerWidth = 200;
     private int playerStartX = 200;
     private int playerStartY = 500;
+    private boolean gameOver = false;
 
     public Model (){
         clouds = new LinkedList<>();
@@ -48,6 +49,12 @@ public class Model {
     public void moveClouds(LinkedList<Clouds> clouds) {
         for (Clouds c : clouds) {
             c.updateX();
+        }
+
+        for (Clouds c : clouds) {
+            if (c.x < -200) {
+                c.x = 1100;
+            }
         }
     }
 
@@ -114,10 +121,18 @@ public class Model {
     }
 
     public void reset() {
+        this.gameOver = false;
         obstacles.remove();
         obstacles = new LinkedList<>();
         player = new Player(playerStartX,playerStartY,playerWidth);
         addObstacle(obstacles);
     }
 
+    public void setGameOver(boolean state) {
+        this.gameOver = state;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
 }

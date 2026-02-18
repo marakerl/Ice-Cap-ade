@@ -19,12 +19,14 @@ public class App {
 
 
         //Menu and define start action
-        MenuView menuView = new MenuView(e -> {
+        MenuView menuView = new MenuView(model, e -> {
             model.reset();
             layout.show(container, "GAME");
             gameView.requestFocusInWindow();
-            controller.tick.start();
         });
+
+        container.addKeyListener(controller); // 1. Master listener
+        container.setFocusable(true);
 
         //Add containers
         container.add(menuView, "MENU");
@@ -40,5 +42,7 @@ public class App {
 
         //Show menu first
         layout.show(container, "MENU");
+
+        container.requestFocusInWindow();
     }
 }

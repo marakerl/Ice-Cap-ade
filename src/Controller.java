@@ -22,19 +22,31 @@ public class Controller implements KeyListener{
 
     public void initTick () {
         tick = new Timer(tickSpeed, e -> {
-            model.moveObstacle(model.getObstacles());
+            // 1. ALWAYS move clouds (this makes the menu look alive)
             model.moveClouds(model.getClouds());
-            model.getPlayer().updateY();
-            model.score();
-            view.updateScoreText();
-            model.timeForNewObstacle(model.getObstacles());
-            model.removeFirst(model.getObstacles());
 
-            if(model.inHitBox(model.getObstacles(),model.getPlayer())) {
-                stopGameAndReturnToMenu();
+            // 2. ONLY move game objects if the game is NOT over AND the menu isn't showing
+            // We check a new flag or just if the game is active
+            if (!model.isGameOver() && view.isShowing()) {
+                model.moveObstacle(model.getObstacles());
+                model.getPlayer().updateY();
+                model.score();
+                view.updateScoreText();
+                model.timeForNewObstacle(model.getObstacles());
+                model.removeFirst(model.getObstacles());
+
+                if (model.inHitBox(model.getObstacles(), model.getPlayer())) {
+                    model.setGameOver(true);
+                    // We DON'T stop the timer anymore, so clouds keep drifting
+                }
             }
+
+            // 3. Repaint both to ensure the Menu OR the Game updates
             view.repaint();
+            container.repaint();
         });
+
+        tick.start();
     }
 
     private void stopGameAndReturnToMenu() {
@@ -45,12 +57,33 @@ public class Controller implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            /*if (!tick.isRunning()) {
-                tick.start();
+
+            // 1. If on Death Screen -> Go to Menu
+            if (model.isGameOver()) {
+                layout.show(container, "MENU");
+                model.setGameOver(false); // Clean the state
+
+                // THE FIX: Tell the container to give the Menu the focus
+                container.requestFocusInWindow();
+            }
+
+            // 2. If on Menu -> Start Game
+            // We check if the game view is hidden to know we are on the menu
+            else if (!view.isShowing()) {
                 model.reset();
-            }*/
-            model.playerJump();
+                layout.show(container, "GAME");
+
+                // THE FIX: Tell the container to give the Game the focus
+                view.requestFocusInWindow();
+            }
+
+            // 3. If playing -> Jump
+            else {
+                model.playerJump();
+            }
+
             view.repaint();
+            container.repaint();
         }
     }
 
