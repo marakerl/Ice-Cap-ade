@@ -8,7 +8,7 @@ public class Controller implements KeyListener{
     Model model;
     View view;
     Timer tick;
-    private int tickSpeed = 10;
+    private int tickSpeed = 17;
     private JPanel container;
     private CardLayout layout;
 
@@ -22,11 +22,8 @@ public class Controller implements KeyListener{
 
     public void initTick () {
         tick = new Timer(tickSpeed, e -> {
-            // 1. ALWAYS move clouds (this makes the menu look alive)
             model.moveClouds(model.getClouds());
 
-            // 2. ONLY move game objects if the game is NOT over AND the menu isn't showing
-            // We check a new flag or just if the game is active
             if (!model.isGameOver() && view.isShowing()) {
                 model.moveObstacle(model.getObstacles());
                 model.getPlayer().updateY();
@@ -37,12 +34,9 @@ public class Controller implements KeyListener{
 
                 if (model.inHitBox(model.getObstacles(), model.getPlayer())) {
                     model.setGameOver(true);
-                    // We DON'T stop the timer anymore, so clouds keep drifting
                 }
             }
 
-            // 3. Repaint both to ensure the Menu OR the Game updates
-            view.repaint();
             container.repaint();
         });
 
@@ -58,31 +52,26 @@ public class Controller implements KeyListener{
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
-            // 1. If on Death Screen -> Go to Menu
+            // If on Death Screen -> Go to Menu
             if (model.isGameOver()) {
                 layout.show(container, "MENU");
                 model.setGameOver(false); // Clean the state
 
-                // THE FIX: Tell the container to give the Menu the focus
                 container.requestFocusInWindow();
             }
 
-            // 2. If on Menu -> Start Game
-            // We check if the game view is hidden to know we are on the menu
+            // If on Menu -> Start Game
             else if (!view.isShowing()) {
                 model.reset();
                 layout.show(container, "GAME");
 
-                // THE FIX: Tell the container to give the Game the focus
                 view.requestFocusInWindow();
             }
-
-            // 3. If playing -> Jump
+            //if playing jump
             else {
                 model.playerJump();
             }
 
-            view.repaint();
             container.repaint();
         }
     }

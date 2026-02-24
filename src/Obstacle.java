@@ -26,9 +26,14 @@ public class Obstacle {
         this.timeForNew = false;
 
         try {
-            iceSprite = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/Ice.png"));
-        } catch (IOException e) {
-            System.out.println("Could not load sprites, using fallback colors.");
+            iceSprite = ImageIO.read(getClass().getResource("/Ice.png"));
+
+            if (iceSprite == null) {
+                throw new IOException("File not found inside JAR");
+            }
+        } catch (Exception e) {
+            System.out.println("Could not load Ice.png from resources. Using fallback.");
+            e.printStackTrace();
         }
     }
 

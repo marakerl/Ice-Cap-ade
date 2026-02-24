@@ -1,8 +1,6 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Player {
     int x, y;
@@ -23,11 +21,11 @@ public class Player {
         this.score = 0;
 
         try {
-            imgUp = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_down.png"));
-            imgStraigt = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_straight.png"));
-            imgDown = ImageIO.read(new File("/home/marakerl/IdeaProjects/Ice Cap-ade/src/wing_up.png"));
-        } catch (IOException e) {
-            System.out.println("Could not load sprites, using fallback colors.");
+            imgUp = ImageIO.read(getClass().getResource("/wing_down.png"));
+            imgStraigt = ImageIO.read(getClass().getResource("/wing_straight.png"));
+            imgDown = ImageIO.read(getClass().getResource("/wing_up.png"));
+        } catch (Exception e) {
+            System.out.println("Could not load sprites via Resources. Error: " + e.getMessage());
         }
     }
 
